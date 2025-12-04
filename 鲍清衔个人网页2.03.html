@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鲍清衔的个人页面</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <style>
+        /* 基础重置与全局样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            overflow: hidden; 
+            position: relative; 
+            min-height: 100vh;
+            font-family: 'Arial', 'Roboto', sans-serif;
+            opacity: 0;
+            animation: pageFadeIn 1.5s ease forwards;
+        }
+
+        /* 1. 多层科幻动态背景（新增多层叠加） */
+        .bg-container {
+            position: absolute; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -3;
+        }
+        #sciFiBg { z-index: -3; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #energyGrid { z-index: -2; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #particleFlow { z-index: -1; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #starField { z-index: -4; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #000010 0%, #0a192f 100%); }
+
+        /* 2. 个人介绍主卡片（增强发光与动态边框） */
+        .intro-card {
+            position: absolute; 
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 3rem 4rem;
+            width: 90%; max-width: 750px;
+            background: rgba(10, 15, 35, 0.85); 
+            backdrop-filter: blur(12px);
+            border: 1px solid;
+            border-image: linear-gradient(45deg, #4CC9F0, #BFDBFE, #A7F3D0, #FCD34D) 1;
+            border-radius: 16px;
+            box-shadow: 
+                0 0 30px rgba(76, 201, 240, 0.3), 
+                0 0 60px rgba(191, 219, 254, 0.2),
+                0 0 90px rgba(167, 243, 208, 0.15),
+                inset 0 0 20px rgba(156, 211, 156, 0.1);
+            z-index: 1;
+            transform: translate(-50%, -50%) scale(0.9);
+            animation: 
+                cardPopIn 1.2s ease 0.3s forwards,
+                cardGlowPulse 4s ease infinite alternate; /* 卡片整体脉冲发光 */
+            max-height: 90vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #4CC9F0 rgba(10, 15, 35, 0.3);
+        }
+
+        /* 滚动条美化 */
+        .intro-card::-webkit-scrollbar { width: 6px; }
+        .intro-card::-webkit-scrollbar-track { background: rgba(10, 15, 35, 0.3); border-radius: 3px; }
+        .intro-card::-webkit-scrollbar-thumb { background: #4CC9F0; border-radius: 3px; box-shadow: 0 0 10px #4CC9F0; }
+
+        /* 3. 基本信息样式（增强动态效果） */
+        .intro-header { margin-bottom: 2.5rem; text-align: center; position: relative; }
+        .intro-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem; left: 50%;
+            transform: translateX(-50%);
+            width: 80px; height: 2px;
+            background: linear-gradient(90deg, transparent, #4CC9F0, transparent);
+            animation: headerLinePulse 3s ease infinite;
+        }
+        .intro-name {
+            font-size: 2.8rem;
+            color: #4CC9F0;
+            margin-bottom: 0.8rem;
+            letter-spacing: 0.08em;
+            text-shadow: 
+                0 0 10px rgba(76, 201, 240, 0.6), 
+                0 0 25px rgba(76, 201, 240, 0.4),
+                0 0 40px rgba(76, 201, 240, 0.2);
+            animation: 
+                namePulse 2s ease infinite alternate,
+                nameFloat 6s ease-in-out infinite; /* 姓名轻微浮动 */
+        }
+        .intro-school {
+            font-size: 1.3rem;
+            color: #BFDBFE;
+            line-height: 1.8;
+            text-shadow: 0 0 8px rgba(191, 219, 254, 0.3);
+            animation: schoolFade 4s ease infinite alternate;
+        }
+
+        /* 4. 技能模块样式（增强动态交互） */
+        .skills-title {
+            font-size: 1.5rem;
+            color: #A7F3D0;
+            text-align: center;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px dashed rgba(167, 243, 208, 0.5);
+            text-shadow: 0 0 10px rgba(167, 243, 208, 0.4);
+            animation: titleGlow 3s ease infinite alternate;
+        }
+        .skills-list {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+        .skill-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 140px;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            opacity: 0.8;
+            transform: translateY(10px);
+            animation: skillFadeUp 0.8s ease forwards;
+            position: relative;
+        }
+        /* 技能项光晕背景 */
+        .skill-item::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: rgba(76, 201, 240, 0.1);
+            filter: blur(20px);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+        .skill-item:nth-child(2)::before { background: rgba(167, 243, 208, 0.1); }
+        .skill-item:hover::before {
+            width: 150px; height: 150px;
+            background: rgba(76, 201, 240, 0.2);
+        }
+        .skill-item:nth-child(2):hover::before { background: rgba(167, 243, 208, 0.2); }
+
+        .skill-item:nth-child(1) { animation-delay: 0.6s; }
+        .skill-item:nth-child(2) { animation-delay: 0.9s; }
+        .skill-item:hover {
+            opacity: 1;
+            transform: translateY(-8px) scale(1.15);
+        }
+        .skill-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #4CC9F0;
+            text-shadow: 
+                0 0 15px rgba(76, 201, 240, 0.6),
+                0 0 30px rgba(76, 201, 240, 0.4);
+            transition: all 0.5s ease;
+            animation: iconPulse 3s ease infinite alternate;
+        }
+        .skill-item:nth-child(2) .skill-icon { 
+            color: #A7F3D0; 
+            text-shadow: 
+                0 0 15px rgba(167, 243, 208, 0.6),
+                0 0 30px rgba(167, 243, 208, 0.4);
+        }
+        .skill-item:hover .skill-icon {
+            transform: rotate(10deg) scale(1.3);
+            text-shadow: 
+                0 0 20px rgba(76, 201, 240, 0.8),
+                0 0 40px rgba(76, 201, 240, 0.6);
+            animation: iconSpin 1s ease;
+        }
+        .skill-item:nth-child(2):hover .skill-icon {
+            text-shadow: 
+                0 0 20px rgba(167, 243, 208, 0.8),
+                0 0 40px rgba(167, 243, 208, 0.6);
+        }
+        .skill-name {
+            font-size: 1.2rem;
+            color: #E0E7FF;
+            transition: color 0.5s ease;
+            text-shadow: 0 0 8px rgba(224, 231, 255, 0.3);
+        }
+        .skill-item:hover .skill-name { 
+            color: #4CC9F0; 
+            text-shadow: 0 0 12px rgba(76, 201, 240, 0.7);
+        }
+        .skill-item:nth-child(2):hover .skill-name { 
+            color: #A7F3D0; 
+            text-shadow: 0 0 12px rgba(167, 243, 208, 0.7);
+        }
+
+        /* 5. 大学规划模块样式（增强动态效果） */
+        .plan-title {
+            font-size: 1.5rem;
+            color: #FCD34D;
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px dashed rgba(252, 211, 77, 0.5);
+            text-shadow: 0 0 10px rgba(252, 211, 77, 0.4);
+            animation: titleGlow 3s ease infinite alternate;
+        }
+        .plan-list {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+        }
+        .plan-item {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(10, 25, 55, 0.6);
+            padding: 1.5rem 1.2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(252, 211, 77, 0.3);
+            transition: all 0.5s ease;
+            opacity: 0.8;
+            transform: translateY(10px);
+            animation: skillFadeUp 0.8s ease forwards;
+            position: relative;
+            overflow: hidden;
+        }
+        /* 规划项动态背景光效 */
+        .plan-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(252, 211, 77, 0.1), transparent);
+            animation: planShine 6s ease-in-out infinite;
+        }
+        /* 规划项光晕 */
+        .plan-item::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200%; height: 200%;
+            border-radius: 50%;
+            background: rgba(252, 211, 77, 0.05);
+            filter: blur(30px);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+        .plan-item:hover::after {
+            background: rgba(252, 211, 77, 0.15);
+            filter: blur(40px);
+        }
+
+        .plan-item:nth-child(1) { animation-delay: 1.2s; }
+        .plan-item:nth-child(2) { animation-delay: 1.5s; }
+        .plan-item:nth-child(3) { animation-delay: 1.8s; }
+        .plan-item:nth-child(4) { animation-delay: 2.1s; }
+        .plan-item:hover {
+            opacity: 1;
+            transform: translateY(-8px) scale(1.08);
+            border-color: rgba(252, 211, 77, 0.8);
+            box-shadow: 
+                0 0 20px rgba(252, 211, 77, 0.3),
+                0 0 40px rgba(252, 211, 77, 0.15);
+        }
+        .plan-year {
+            font-size: 1.3rem;
+            color: #FCD34D;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(252, 211, 77, 0.5);
+            animation: yearPulse 3s ease infinite alternate;
+        }
+        .plan-desc {
+            font-size: 1.05rem;
+            color: #E0E7FF;
+            line-height: 1.7;
+            text-align: center;
+            text-shadow: 0 0 8px rgba(224, 231, 255, 0.3);
+        }
+        .plan-icon {
+            font-size: 2.2rem;
+            color: #FCD34D;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 12px rgba(252, 211, 77, 0.6);
+            animation: iconPulse 3s ease infinite alternate;
+        }
+
+        /* 6. 新增：浮动装饰元素 */
+        .floating-decor {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(76, 201, 240, 0.3) 0%, transparent 70%);
+            filter: blur(20px);
+            animation: float 8s ease-in-out infinite;
+            z-index: -1;
+        }
+        .decor1 { width: 200px; height: 200px; top: 10%; left: 10%; animation-delay: 0s; }
+        .decor2 { width: 150px; height: 150px; bottom: 15%; right: 10%; animation-delay: 2s; background: radial-gradient(circle, rgba(167, 243, 208, 0.2) 0%, transparent 70%); }
+        .decor3 { width: 180px; height: 180px; top: 60%; left: 20%; animation-delay: 4s; background: radial-gradient(circle, rgba(252, 211, 77, 0.2) 0%, transparent 70%); }
+
+        /* 7. 所有动画关键帧定义（大幅新增） */
+        /* 页面加载淡入 */
+        @keyframes pageFadeIn { to { opacity: 1; } }
+
+        /* 卡片弹出入场 */
+        @keyframes cardPopIn { to { transform: translate(-50%, -50%) scale(1); } }
+
+        /* 卡片整体脉冲发光 */
+        @keyframes cardGlowPulse {
+            from { box-shadow: 0 0 30px rgba(76, 201, 240, 0.3), 0 0 60px rgba(191, 219, 254, 0.2), 0 0 90px rgba(167, 243, 208, 0.15), inset 0 0 20px rgba(156, 211, 156, 0.1); }
+            to { box-shadow: 0 0 40px rgba(76, 201, 240, 0.4), 0 0 80px rgba(191, 219, 254, 0.3), 0 0 120px rgba(167, 243, 208, 0.25), inset 0 0 30px rgba(156, 211, 156, 0.2); }
+        }
+
+        /* 姓名霓虹脉冲 */
+        @keyframes namePulse {
+            from { text-shadow: 0 0 10px rgba(76, 201, 240, 0.6), 0 0 25px rgba(76, 201, 240, 0.4), 0 0 40px rgba(76, 201, 240, 0.2); }
+            to { text-shadow: 0 0 15px rgba(76, 201, 240, 0.8), 0 0 35px rgba(76, 201, 240, 0.6), 0 0 60px rgba(76, 201, 240, 0.4); }
+        }
+
+        /* 姓名轻微浮动 */
+        @keyframes nameFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* 学校信息淡入淡出 */
+        @keyframes schoolFade {
+            from { opacity: 0.8; text-shadow: 0 0 8px rgba(191, 219, 254, 0.3); }
+            to { opacity: 1; text-shadow: 0 0 12px rgba(191, 219, 254, 0.5); }
+        }
+
+        /* 标题发光 */
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 8px rgba(167, 243, 208, 0.4); }
+            to { text-shadow: 0 0 15px rgba(167, 243, 208, 0.7); }
+        }
+
+        /* 技能项向上淡入 */
+        @keyframes skillFadeUp { to { opacity: 0.8; transform: translateY(0); } }
+
+        /* 图标脉冲 */
+        @keyframes iconPulse {
+            from { text-shadow: 0 0 15px rgba(76, 201, 240, 0.6), 0 0 30px rgba(76, 201, 240, 0.4); }
+            to { text-shadow: 0 0 20px rgba(76, 201, 240, 0.8), 0 0 40px rgba(76, 201, 240, 0.6); }
+        }
+
+        /* 图标旋转 */
+        @keyframes iconSpin {
+            0% { transform: rotate(0) scale(1); }
+            50% { transform: rotate(15deg) scale(1.4); }
+            100% { transform: rotate(10deg) scale(1.3); }
+        }
+
+        /* 规划项年份脉冲 */
+        @keyframes yearPulse {
+            from { text-shadow: 0 0 10px rgba(252, 211, 77, 0.5); }
+            to { text-shadow: 0 0 18px rgba(252, 211, 77, 0.8); }
+        }
+
+        /* 规划项流光效果 */
+        @keyframes planShine {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
+        }
+
+        /* 头部下划线脉冲 */
+        @keyframes headerLinePulse {
+            0%, 100% { width: 80px; opacity: 0.6; }
+            50% { width: 120px; opacity: 1; }
+        }
+
+        /* 浮动装饰动画 */
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(15px, -15px) rotate(5deg); }
+            50% { transform: translate(0, 15px) rotate(0deg); }
+            75% { transform: translate(-15px, -10px) rotate(-5deg); }
+        }
+
+        /* 能量网格脉冲 */
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        /* 粒子流加速效果 */
+        @keyframes particleSpeed {
+            0%, 100% { speed: 1; }
+            50% { speed: 1.5; }
+        }
+
+        /* 星空闪烁 */
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .intro-card {
+                padding: 2rem 1.5rem;
+                max-height: 95vh;
+            }
+            .intro-name {
+                font-size: 2.2rem;
+            }
+            .plan-item {
+                min-width: 100%;
+            }
+            .skills-list {
+                gap: 1.5rem;
+            }
+            .skill-item {
+                width: 100px;
+            }
+            .skill-icon {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 浮动装饰元素（新增） -->
+    <div class="floating-decor decor1"></div>
+    <div class="floating-decor decor2"></div>
+    <div class="floating-decor decor3"></div>
+
+    <!-- 多层科幻背景 -->
+    <div class="bg-container">
+        <canvas id="starField"></canvas> <!-- 星空背景 -->
+        <canvas id="sciFiBg"></canvas> <!-- 原粒子+网格 -->
+        <canvas id="energyGrid"></canvas> <!-- 新增能量网格 -->
+        <canvas id="particleFlow"></canvas> <!-- 新增粒子流 -->
+    </div>
+
+    <!-- 个人介绍主卡片 -->
+    <div class="intro-card">
+        <!-- 基本信息 -->
+        <div class="intro-header">
+            <h1 class="intro-name">鲍清衔</h1>
+            <p class="intro-school">就读于华中科技大学</p>
+            <p class="intro-school">软件学院学生</p>
+        </div>
+
+        <!-- 技能模块 -->
+        <h2 class="skills-title">个人技能</h2>
+        <div class="skills-list">
+            <div class="skill-item">
+                <i class="fa fa-code skill-icon" aria-hidden="true"></i>
+                <span class="skill-name">写代码</span>
+            </div>
+            <div class="skill-item">
+                <i class="fa fa-users skill-icon" aria-hidden="true"></i>
+                <span class="skill-name">组织活动</span>
+            </div>
+        </div>
+
+        <!-- 大学规划模块 -->
+        <h2 class="plan-title">大学四年规划</h2>
+        <div class="plan-list">
+            <div class="plan-item">
+                <div class="plan-icon"><i class="fa fa-book" aria-hidden="true"></i></div>
+                <div class="plan-year">大一</div>
+                <div class="plan-desc">夯实基础，熟悉环境</div>
+            </div>
+            <div class="plan-item">
+                <div class="plan-icon"><i class="fa fa-rocket" aria-hidden="true"></i></div>
+                <div class="plan-year">大二</div>
+                <div class="plan-desc">开始进行更进一步的探索，包括参加各类竞赛及设计各种项目，在实践中熟练掌握各种语言</div>
+            </div>
+            <div class="plan-item">
+                <div class="plan-icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i></div>
+                <div class="plan-year">大三</div>
+                <div class="plan-desc">根据情况努力保研或考研</div>
+            </div>
+            <div class="plan-item">
+                <div class="plan-icon"><i class="fa fa-briefcase" aria-hidden="true"></i></div>
+                <div class="plan-year">大四</div>
+                <div class="plan-desc">去公司实习做项目赚钱，并为研究生生活做好准备</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 原有SDK代码 -->
+    <script src="https://agi-dev-platform-web.cdn.bcebos.com/ai_apaas/embed/output/embedLiteSDK.js?responseExpires=0&t=1763776319977"></script>
+    <script>
+        new EmbedLiteSDK({appId: 'd5709b98-ba74-4f97-aadb-53911d56f57d', code: 'embedwSDpPRYK4aV8WTroTZpd'});
+    </script>
+
+    <!-- 增强版动态背景脚本（大幅新增特效） -->
+    <script>
+        // 工具函数：随机数生成
+        function random(min, max) { return Math.random() * (max - min) + min; }
+
+        // 1. 星空背景（新增）
+        const starCanvas = document.getElementById('starField');
+        const starCtx = starCanvas.getContext('2d');
+        let stars = [];
+
+        class Star {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = random(0, starCanvas.width);
+                this.y = random(0, starCanvas.height);
+                this.size = random(0.1, 1.2);
+                this.alpha = random(0.3, 1);
+                this.twinkleSpeed = random(0.005, 0.02);
+                this.direction = random(0, 1) > 0.5 ? 1 : -1;
+            }
+            update() {
+                this.alpha += this.direction * this.twinkleSpeed;
+                if (this.alpha > 1 || this.alpha < 0.3) this.direction *= -1;
+            }
+            draw() {
+                starCtx.beginPath();
+                starCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                starCtx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                starCtx.fill();
+            }
+        }
+
+        // 2. 原粒子+网格背景优化
+        const mainCanvas = document.getElementById('sciFiBg');
+        const mainCtx = mainCanvas.getContext('2d');
+        let gridLines = [];
+        let particles = [];
+
+        // 网格线增强
+        class GridLine {
+            constructor(isHorizontal) {
+                this.isHorizontal = isHorizontal;
+                this.y = isHorizontal ? random(0, mainCanvas.height) : 0;
+                this.x = isHorizontal ? 0 : random(0, mainCanvas.width);
+                this.speed = random(0.5, 1.2);
+                this.alpha = random(0.1, 0.4);
+                this.pulseRate = random(0.002, 0.005);
+                this.color = random(0, 1) > 0.5 ? '#4CC9F0' : '#A7F3D0';
+            }
+            update() {
+                this.isHorizontal ? (this.y += this.speed) : (this.x += this.speed);
+                this.alpha = Math.sin(Date.now() * this.pulseRate) * 0.2 + 0.3;
+                if (this.isHorizontal && this.y > mainCanvas.height) this.y = -20;
+                if (!this.isHorizontal && this.x > mainCanvas.width) this.x = -20;
+            }
+            draw() {
+                mainCtx.beginPath();
+                mainCtx.strokeStyle = `${this.color}${Math.floor(this.alpha * 100).toString(16).padStart(2, '0')}`;
+                mainCtx.lineWidth = random(0.5, 1.2);
+                this.isHorizontal 
+                    ? mainCtx.moveTo(0, this.y).lineTo(mainCanvas.width, this.y) 
+                    : mainCtx.moveTo(this.x, 0).lineTo(this.x, mainCanvas.height);
+                mainCtx.stroke();
+            }
+        }
+
+        // 粒子增强
+        class Particle {
+            constructor() {
+                this.reset();
+                this.tail = [];
+                this.tailLength = random(3, 8);
+                this.color = random(0, 1) > 0.5 
+                    ? `rgba(191, 219, 254, ${random(0.3, 0.6)})` 
+                    : `rgba(156, 211, 156, ${random(0.3, 0.6)})`;
+            }
+            reset() {
+                this.x = random(0, mainCanvas.width);
+                this.y = random(0, mainCanvas.height);
+                this.size = random(0.8, 2);
+                this.speedX = (random(0, 1) - 0.5) * random(0.4, 0.8);
+                this.speedY = (random(0, 1) - 0.5) * random(0.4, 0.8);
+            }
+            update() {
+                this.tail.unshift({x: this.x, y: this.y});
+                if (this.tail.length > this.tailLength) this.tail.pop();
+
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > mainCanvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > mainCanvas.height) this.speedY *= -1;
+
+                // 粒子间引力/斥力
+                particles.forEach(p => {
+                    if (p !== this) {
+                        const dx = this.x - p.x;
+                        const dy = this.y - p.y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < 50) {
+                            this.x += dx * 0.005;
+                            this.y += dy * 0.005;
+                        } else if (dist < 200) {
+                            this.x -= dx * 0.001;
+                            this.y -= dy * 0.001;
+                        }
+                    }
+                });
+            }
+            draw() {
+                // 尾迹
+                this.tail.forEach((pos, i) => {
+                    const alpha = parseFloat(this.color.match(/\d+\.\d+/)[0]) * (1 - i/this.tailLength);
+                    const tailColor = this.color.replace(/\d+\.\d+(?=\))/, alpha.toFixed(2));
+                    mainCtx.beginPath();
+                    mainCtx.arc(pos.x, pos.y, this.size * (1 - i/this.tailLength), 0, Math.PI * 2);
+                    mainCtx.fillStyle = tailColor;
+                    mainCtx.fill();
+                });
+                // 本体
+                mainCtx.beginPath();
+                mainCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                mainCtx.fillStyle = this.color;
+                mainCtx.fill();
+            }
+        }
+
+        // 3. 能量网格（新增）
+        const energyCanvas = document.getElementById('energyGrid');
+        const energyCtx = energyCanvas.getContext('2d');
+        let gridPoints = [];
+        const gridSize = 40;
+
+        class GridPoint {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.pulseRate = random(0.003, 0.008);
+                this.alpha = random(0.1, 0.3);
+            }
+            update() {
+                this.alpha = Math.sin(Date.now() * this.pulseRate) * 0.2 + 0.2;
+            }
+            draw() {
+                // 绘制点
+                energyCtx.beginPath();
+                energyCtx.arc(this.x, this.y, 1, 0, Math.PI * 2);
+                energyCtx.fillStyle = `rgba(76, 201, 240, ${this.alpha})`;
+                energyCtx.fill();
+
+                // 绘制连接线
+                if (this.x < energyCanvas.width - gridSize) {
+                    const rightPoint = gridPoints.find(p => p.x === this.x + gridSize && p.y === this.y);
+                    if (rightPoint) {
+                        energyCtx.beginPath();
+                        energyCtx.moveTo(this.x, this.y);
+                        energyCtx.lineTo(rightPoint.x, rightPoint.y);
+                        energyCtx.strokeStyle = `rgba(76, 201, 240, ${(this.alpha + rightPoint.alpha) / 4})`;
+                        energyCtx.lineWidth = 0.3;
+                        energyCtx.stroke();
+                    }
+                }
+                if (this.y < energyCanvas.height - gridSize) {
+                    const bottomPoint = gridPoints.find(p => p.x === this.x && p.y === this.y + gridSize);
+                    if (bottomPoint) {
+                        energyCtx.beginPath();
+                        energyCtx.moveTo(this.x, this.y);
+                        energyCtx.lineTo(bottomPoint.x, bottomPoint.y);
+                        energyCtx.strokeStyle = `rgba(76, 201, 240, ${(this.alpha + bottomPoint.alpha) / 4})`;
+                        energyCtx.lineWidth = 0.3;
+                        energyCtx.stroke();
+                    }
+                }
+            }
+        }
+
+        // 4. 粒子流（新增）
+        const flowCanvas = document.getElementById('particleFlow');
+        const flowCtx = flowCanvas.getContext('2d');
+        let particleStreams = [];
+
+        class ParticleStream {
+            constructor() {
+                this.reset();
+                this.particles = [];
+                this.streamLength = random(10, 20);
+            }
+            reset() {
+                this.x = random(0, flowCanvas.width);
+                this.y = random(-100, -50);
+                this.directionX = random(-0.5, 0.5);
+                this.speedY = random(2, 4);
+                this.color = random(0, 1) > 0.5 ? '#4CC9F0' : '#FCD34D';
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.directionX;
+
+                // 添加新粒子
+                this.particles.unshift({x: this.x, y: this.y, alpha: 1});
+                if (this.particles.length > this.streamLength) this.particles.pop();
+
+                // 粒子淡出
+                this.particles.forEach((p, i) => {
+                    p.alpha = 1 - i/this.streamLength;
+                });
+
+                // 重置流
+                if (this.y > flowCanvas.height + 50) this.reset();
+            }
+            draw() {
+                // 绘制流线段
+                for (let i = 0; i < this.particles.length - 1; i++) {
+                    const p1 = this.particles[i];
+                    const p2 = this.particles[i+1];
+                    flowCtx.beginPath();
+                    flowCtx.moveTo(p1.x, p1.y);
+                    flowCtx.lineTo(p2.x, p2.y);
+                    flowCtx.strokeStyle = `${this.color}${Math.floor(p1.alpha * 100).toString(16).padStart(2, '0')}`;
+                    flowCtx.lineWidth = random(1, 2);
+                    flowCtx.stroke();
+                }
+
+                // 绘制粒子节点
+                this.particles.forEach(p => {
+                    flowCtx.beginPath();
+                    flowCtx.arc(p.x, p.y, random(1, 2), 0, Math.PI * 2);
+                    flowCtx.fillStyle = `${this.color}${Math.floor(p1.alpha * 100).toString(16).padStart(2, '0')}`;
+                    flowCtx.fill();
+                });
+            }
+        }
+
+        // 初始化所有特效
+        function initAll() {
+            // 屏幕适配
+            function resize() {
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                
+                [starCanvas, mainCanvas, energyCanvas, flowCanvas].forEach(canvas => {
+                    canvas.width = width;
+                    canvas.height = height;
+                });
+
+                // 重新初始化星空
+                stars = Array.from({length: 500}, () => new Star());
+
+                // 重新初始化网格线
+                gridLines = Array.from({length: 80}, () => new GridLine(random(0, 1) > 0.5));
+
+                // 重新初始化粒子
+                particles = Array.from({length: 200}, () => new Particle());
+
+                // 重新初始化能量网格
+                gridPoints = [];
+                for (let x = 0; x < energyCanvas.width; x += gridSize) {
+                    for (let y = 0; y < energyCanvas.height; y += gridSize) {
+                        gridPoints.push(new GridPoint(x, y));
+                    }
+                }
+
+                // 重新初始化粒子流
+                particleStreams = Array.from({length: 15}, () => new ParticleStream());
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // 动画循环
+            function animateAll() {
+                // 星空背景
+                starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+                stars.forEach(star => { star.update(); star.draw(); });
+
+                // 原粒子+网格
+                mainCtx.fillStyle = 'rgba(0, 0, 16, 0.1)';
+                mainCtx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+                gridLines.forEach(line => { line.update(); line.draw(); });
+                particles.forEach(particle => { particle.update(); particle.draw(); });
+
+                // 能量网格
+                energyCtx.clearRect(0, 0, energyCanvas.width, energyCanvas.height);
+                gridPoints.forEach(point => { point.update(); point.draw(); });
+
+                // 粒子流
+                flowCtx.clearRect(0, 0, flowCanvas.width, flowCanvas.height);
+                particleStreams.forEach(stream => { stream.update(); stream.draw(); });
+
+                requestAnimationFrame(animateAll);
+            }
+
+            animateAll();
+        }
+
+        // 启动所有特效
+        window.addEventListener('load', initAll);
+    </script>
+</body>
+</html>
