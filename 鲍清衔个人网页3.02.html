@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鲍清衔的个人主页 | 未来卓越工程师</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <style>
+        /* 基础重置与全局样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            overflow-x: hidden;
+            position: relative; 
+            min-height: 100vh;
+            font-family: '思源黑体', 'HarmonyOS Sans SC', sans-serif;
+            opacity: 0;
+            animation: pageFadeIn 1.5s ease forwards;
+            background-color: #0a192f;
+        }
+
+        /* 1. 多层科幻动态背景（保留并优化） */
+        .bg-container {
+            position: absolute; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -3;
+        }
+        #sciFiBg { z-index: -3; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #energyGrid { z-index: -2; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #particleFlow { z-index: -1; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #starField { z-index: -4; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #000010 0%, #0a192f 100%); }
+
+        /* 2. 导航栏（主色调改为蓝色 #4299e1） */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            padding: 1.2rem 5%;
+            background: rgba(10, 25, 47, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(66, 153, 225, 0.1);
+        }
+        .navbar-logo {
+            color: #ccd6f6;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .navbar-logo i { color: #4299e1; }
+        .navbar-menu {
+            display: flex;
+            gap: 3rem;
+        }
+        .navbar-menu a {
+            color: #ccd6f6;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .navbar-menu a:hover { color: #4299e1; }
+        .navbar-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 2px;
+            background: #4299e1;
+            transition: width 0.3s ease;
+        }
+        .navbar-menu a:hover::after { width: 100%; }
+
+        /* 3. Hero Section（首页，主色调改为蓝色） */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            margin-top: 60px;
+        }
+        .hero-content {
+            flex: 1;
+            animation: fadeRight 1.5s ease forwards;
+            opacity: 0;
+            animation-delay: 0.5s;
+        }
+        .hero-greeting {
+            font-size: 1.2rem;
+            color: #4299e1;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            color: #ccd6f6;
+            line-height: 1.3;
+            margin-bottom: 1.5rem;
+        }
+        .hero-title span { color: #4299e1; }
+        .hero-desc {
+            font-size: 1.2rem;
+            color: #8892b0;
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary {
+            background: #4299e1;
+            color: #0a192f;
+            border: none;
+            box-shadow: 0 0 20px rgba(66, 153, 225, 0.3);
+        }
+        .btn-primary:hover {
+            background: #63b3ed;
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(66, 153, 225, 0.5);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #4299e1;
+            border: 2px solid #4299e1;
+        }
+        .btn-outline:hover {
+            background: rgba(66, 153, 225, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* 4. 关于我（主色调改为蓝色） */
+        .about-section {
+            padding: 10rem 5%;
+            background: #0f2442;
+            position: relative;
+            z-index: 1;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ccd6f6;
+            margin-bottom: 8rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px; left: 50%;
+            transform: translateX(-50%);
+            width: 60px; height: 3px;
+            background: #4299e1;
+        }
+        .about-container {
+            display: flex;
+            gap: 5rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .about-photo {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        .photo-frame {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #4299e1;
+            box-shadow: 0 0 30px rgba(66, 153, 225, 0.4);
+            background: #0a192f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccd6f6;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 2rem;
+        }
+        .about-info {
+            flex: 2;
+        }
+        .about-desc {
+            font-size: 1.1rem;
+            color: #8892b0;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        .about-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .detail-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(66, 153, 225, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4299e1;
+            font-size: 1.2rem;
+        }
+        .detail-content h3 {
+            color: #ccd6f6;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        .detail-content p {
+            color: #8892b0;
+            font-size: 0.95rem;
+        }
+
+        /* 5. 生涯规划时间轴（主色调改为蓝色） */
+        .timeline-section {
+            padding: 10rem 5%;
+            position: relative;
+            z-index: 1;
+        }
+        .timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            background: linear-gradient(to bottom, #4299e1, #63b3ed, rgba(66, 153, 225, 0.3));
+            border-radius: 2px;
+        }
+        .timeline-item {
+            margin-bottom: 6rem;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards;
+        }
+        .timeline-item:nth-child(1) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.9s; }
+        .timeline-item:nth-child(4) { animation-delay: 1.2s; }
+        .timeline-item-left {
+            left: 0;
+            padding-right: 40px;
+        }
+        .timeline-item-right {
+            left: 50%;
+            padding-left: 40px;
+        }
+        .timeline-dot {
+            position: absolute;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #4299e1;
+            border: 4px solid #0a192f;
+            box-shadow: 0 0 20px rgba(66, 153, 225, 0.5);
+            z-index: 2;
+        }
+        .timeline-item-left .timeline-dot { right: -14px; }
+        .timeline-item-right .timeline-dot { left: -14px; }
+        .timeline-card {
+            background: rgba(10, 25, 47, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(66, 153, 225, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .timeline-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border-color: rgba(66, 153, 225, 0.3);
+        }
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .timeline-title {
+            font-size: 1.5rem;
+            color: #ccd6f6;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .timeline-title i { color: #4299e1; }
+        .timeline-tag {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .tag-active {
+            background: rgba(66, 153, 225, 0.2);
+            color: #4299e1;
+        }
+        .tag-planned {
+            background: rgba(100, 181, 246, 0.2);
+            color: #64b5f6;
+        }
+        .timeline-content {
+            margin-bottom: 1.5rem;
+        }
+        .timeline-goal {
+            color: #8892b0;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .timeline-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .skill-tag {
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            background: rgba(148, 163, 184, 0.1);
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        .timeline-projects h4 {
+            color: #ccd6f6;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+        .project-list {
+            list-style: none;
+        }
+        .project-list li {
+            color: #8892b0;
+            line-height: 1.8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .project-list li i { color: #4299e1; font-size: 0.7rem; }
+
+        /* 6. 我的技能（C语言为主70%，其他≤10%，主色调改为蓝色） */
+        .skills-section {
+            padding: 10rem 5%;
+            background: #0f2442;
+            position: relative;
+            z-index: 1;
+        }
+        .skills-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+        .skill-category {
+            background: rgba(10, 25, 47, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(66, 153, 225, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .category-title {
+            font-size: 1.3rem;
+            color: #ccd6f6;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .category-title i { color: #4299e1; }
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .skill-name {
+            color: #8892b0;
+            font-size: 1rem;
+        }
+        .skill-level {
+            color: #4299e1;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .skill-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(148, 163, 184, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(to right, #4299e1, #63b3ed);
+            border-radius: 4px;
+            transition: width 1.5s ease;
+        }
+
+        /* 7. 联系方式（主色调改为蓝色） */
+        .contact-section {
+            padding: 10rem 5%;
+            position: relative;
+            z-index: 1;
+        }
+        .contact-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(10, 25, 47, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 3rem;
+            border: 1px solid rgba(66, 153, 225, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .contact-content {
+            display: flex;
+            gap: 5rem;
+        }
+        .contact-info {
+            flex: 1;
+        }
+        .contact-info h3 {
+            font-size: 1.8rem;
+            color: #ccd6f6;
+            margin-bottom: 2rem;
+        }
+        .contact-desc {
+            color: #8892b0;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #8892b0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .contact-link:hover {
+            color: #4299e1;
+            transform: translateX(5px);
+        }
+        .contact-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(66, 153, 225, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4299e1;
+            font-size: 1.2rem;
+        }
+        .contact-form {
+            flex: 1;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            color: #8892b0;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #ccd6f6;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        }
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* 8. 页脚（主色调改为蓝色） */
+        .footer {
+            padding: 3rem 5%;
+            background: #0a192f;
+            border-top: 1px solid rgba(66, 153, 225, 0.1);
+            text-align: center;
+            color: #8892b0;
+            font-size: 1rem;
+        }
+        .footer p {
+            margin-bottom: 1rem;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(66, 153, 225, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4299e1;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .social-link:hover {
+            background: #4299e1;
+            color: #0a192f;
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(66, 153, 225, 0.4);
+        }
+
+        /* 9. 浮动装饰元素（改为蓝色系） */
+        .floating-decor {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(66, 153, 225, 0.2) 0%, transparent 70%);
+            filter: blur(30px);
+            animation: float 8s ease-in-out infinite;
+            z-index: -1;
+        }
+        .decor1 { width: 250px; height: 250px; top: 20%; left: 10%; animation-delay: 0s; }
+        .decor2 { width: 200px; height: 200px; bottom: 20%; right: 15%; animation-delay: 2s; background: radial-gradient(circle, rgba(100, 181, 246, 0.2) 0%, transparent 70%); }
+        .decor3 { width: 180px; height: 180px; top: 60%; left: 25%; animation-delay: 4s; }
+
+        /* 10. 所有动画关键帧定义 */
+        @keyframes pageFadeIn { to { opacity: 1; } }
+        @keyframes fadeRight {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(15px, -15px) rotate(5deg); }
+            50% { transform: translate(0, 15px) rotate(0deg); }
+            75% { transform: translate(-15px, -10px) rotate(-5deg); }
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 1200px) {
+            .about-container { gap: 3rem; }
+            .contact-content { gap: 3rem; }
+        }
+        @media (max-width: 992px) {
+            .hero-title { font-size: 2.8rem; }
+            .timeline::before { left: 30px; }
+            .timeline-item { width: 100%; }
+            .timeline-item-left, .timeline-item-right {
+                left: 0;
+                padding-left: 70px;
+                padding-right: 0;
+            }
+            .timeline-item-left .timeline-dot, .timeline-item-right .timeline-dot {
+                left: 20px;
+                right: auto;
+            }
+            .about-container { flex-direction: column; }
+            .contact-content { flex-direction: column; }
+        }
+        @media (max-width: 768px) {
+            .navbar-menu { gap: 1.5rem; }
+            .hero-section { padding: 0 3%; margin-top: 40px; }
+            .hero-title { font-size: 2.2rem; }
+            .hero-buttons { flex-direction: column; gap: 1rem; }
+            .section-title { font-size: 2rem; margin-bottom: 5rem; }
+            .about-section, .timeline-section, .skills-section, .contact-section { padding: 7rem 3%; }
+            .photo-frame { width: 250px; height: 250px; }
+            .contact-container { padding: 2rem; }
+        }
+        @media (max-width: 576px) {
+            .navbar { padding: 1rem 3%; }
+            .navbar-logo { font-size: 1.2rem; }
+            .navbar-menu { display: none; }
+            .hero-desc { font-size: 1rem; }
+            .skill-category { padding: 1.5rem; }
+            .detail-item { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <i class="fa fa-code" aria-hidden="true"></i>
+            <span>鲍清衔的个人主页</span>
+        </div>
+        <div class="navbar-menu">
+            <a href="#about">关于我</a>
+            <a href="#timeline">生涯规划</a>
+            <a href="#skills">我的技能</a>
+            <a href="#contact">联系方式</a>
+        </div>
+    </nav>
+
+    <!-- 浮动装饰元素 -->
+    <div class="floating-decor decor1"></div>
+    <div class="floating-decor decor2"></div>
+    <div class="floating-decor decor3"></div>
+
+    <!-- 多层科幻背景 -->
+    <div class="bg-container">
+        <canvas id="starField"></canvas> <!-- 星空背景 -->
+        <canvas id="sciFiBg"></canvas> <!-- 原粒子+网格 -->
+        <canvas id="energyGrid"></canvas> <!-- 能量网格 -->
+        <canvas id="particleFlow"></canvas> <!-- 粒子流 -->
+    </div>
+
+    <!-- Hero Section（首页） -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-greeting">👋 你好，我是鲍清衔</div>
+            <h1 class="hero-title">一名<span>未来的卓越工程师</span></h1>
+            <p class="hero-desc">
+                充满热情的软件学院学生，正于华中科技大学探索技术的无限可能。
+                深耕C语言基础开发，这是我的成长记录与数字家园，记录着从基础夯实到技术深耕的每一步。
+            </p>
+            <div class="hero-buttons">
+                <a href="#timeline" class="btn btn-primary">
+                    <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                    查看我的规划
+                </a>
+                <a href="#skills" class="btn btn-outline">
+                    <i class="fa fa-code" aria-hidden="true"></i>
+                    浏览我的技能
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我（更新兴趣为C语言） -->
+    <section id="about" class="about-section">
+        <h2 class="section-title">关于我</h2>
+        <div class="about-container">
+            <div class="about-photo">
+                <div class="photo-frame">
+                    <span>上传一张专业、阳光的个人形象照</span>
+                </div>
+            </div>
+            <div class="about-info">
+                <p class="about-desc">
+                    我是鲍清衔，目前就读于华中科技大学软件学院，是一名充满热情、有条理且行动力强的大一新生。
+                    我对计算机技术抱有浓厚的兴趣，尤其热衷于以C语言为核心的程序设计与系统开发领域。
+                    我相信通过四年的系统学习与实践，能够成为一名具备扎实C语言基础、丰富实践经验和清晰行业视野的优秀人才。
+                    我喜欢在解决问题中成长，乐于参与团队协作，始终保持对新技术的好奇心与学习热情。
+                </p>
+                <div class="about-details">
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fa fa-university" aria-hidden="true"></i>
+                        </div>
+                        <div class="detail-content">
+                            <h3>当前状态</h3>
+                            <p>华中科技大学 | 软件学院</p>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fa fa-lightbulb-o" aria-hidden="true"></i>
+                        </div>
+                        <div class="detail-content">
+                            <h3>兴趣领域</h3>
+                            <p>C语言 | 程序设计 | 系统开发</p>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                        </div>
+                        <div class="detail-content">
+                            <h3>所在地</h3>
+                            <p>武汉</p>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fa fa-heart" aria-hidden="true"></i>
+                        </div>
+                        <div class="detail-content">
+                            <h3>核心价值观</h3>
+                            <p>持续学习 | 务实创新</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 生涯规划时间轴（更新技能为C语言） -->
+    <section id="timeline" class="timeline-section">
+        <h2 class="section-title">生涯规划时间轴</h2>
+        <div class="timeline">
+            <!-- 大一：探索期 -->
+            <div class="timeline-item timeline-item-left">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title">
+                            <i class="fa fa-rocket" aria-hidden="true"></i>
+                            大一 · 探索期
+                        </h3>
+                        <span class="timeline-tag tag-active">进行中</span>
+                    </div>
+                    <div class="timeline-content">
+                        <p class="timeline-goal"><strong>核心目标：</strong>夯实C语言基础，熟悉环境，开拓视野，GPA保持专业前30%。</p>
+                        <div class="timeline-skills">
+                            <span class="skill-tag">C语言（主力语言）</span>
+                            <span class="skill-tag">计算机基础</span>
+                            <span class="skill-tag">CET-4</span>
+                            <span class="skill-tag">Git版本控制</span>
+                        </div>
+                        <div class="timeline-projects">
+                            <h4>计划完成：</h4>
+                            <ul class="project-list">
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 加入1个技术类社团（ACM/开源俱乐部）</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 参加1次校内编程马拉松</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 搭建GitHub主页，管理C语言代码</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 完成C语言课程项目，发布第一篇技术博客</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 大二：发展期 -->
+            <div class="timeline-item timeline-item-right">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title">
+                            <i class="fa fa-code-fork" aria-hidden="true"></i>
+                            大二 · 发展期
+                        </h3>
+                        <span class="timeline-tag tag-planned">计划中</span>
+                    </div>
+                    <div class="timeline-content">
+                        <p class="timeline-goal"><strong>核心目标：</strong>技能深化，方向探索，深入学习专业核心课程，积累C语言实践经验。</p>
+                        <div class="timeline-skills">
+                            <span class="skill-tag">C语言进阶</span>
+                            <span class="skill-tag">数据结构与算法（C实现）</span>
+                            <span class="skill-tag">MySQL数据库</span>
+                            <span class="skill-tag">CET-6</span>
+                        </div>
+                        <div class="timeline-projects">
+                            <h4>计划完成：</h4>
+                            <ul class="project-list">
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 参与1个C语言相关开源项目或独立开发小型工具</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 申请校内科研助理或实验室项目</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 寻找第一份技术实习（暑期）</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 持续更新技术博客，丰富C语言项目经验</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 大三：冲刺期 -->
+            <div class="timeline-item timeline-item-left">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title">
+                            <i class="fa fa-trophy" aria-hidden="true"></i>
+                            大三 · 冲刺期
+                        </h3>
+                        <span class="timeline-tag tag-planned">计划中</span>
+                    </div>
+                    <div class="timeline-content">
+                        <p class="timeline-goal"><strong>核心目标：</strong>专业分流，实习攻坚，掌握C语言相关技术栈，提升项目主导能力。</p>
+                        <div class="timeline-skills">
+                            <span class="skill-tag">C/C++技术栈</span>
+                            <span class="skill-tag">Linux操作系统</span>
+                            <span class="skill-tag">嵌入式开发（可选）</span>
+                            <span class="skill-tag">技术面试准备（LeetCode）</span>
+                        </div>
+                        <div class="timeline-projects">
+                            <h4>计划完成：</h4>
+                            <ul class="project-list">
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 争取大厂或成长型科技公司暑期实习</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 主导或核心参与一个C语言相关中型项目</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 参加专业竞赛，冲击奖项</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 确定专业方向（系统开发/嵌入式/后端）</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 大四：收获期 -->
+            <div class="timeline-item timeline-item-right">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title">
+                            <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                            大四 · 收获期
+                        </h3>
+                        <span class="timeline-tag tag-planned">计划中</span>
+                    </div>
+                    <div class="timeline-content">
+                        <p class="timeline-goal"><strong>核心目标：</strong>定位未来，顺利过渡，根据规划路径全力冲刺目标。</p>
+                        <div class="timeline-skills">
+                            <span class="skill-tag">C语言领域专家级知识</span>
+                            <span class="skill-tag">简历/作品集优化</span>
+                            <span class="skill-tag">面试技巧强化</span>
+                            <span class="skill-tag">研究生备考/申请材料准备</span>
+                        </div>
+                        <div class="timeline-projects">
+                            <h4>计划完成：</h4>
+                            <ul class="project-list">
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 路径A（就业）：备战秋招/春招，拿下心仪Offer</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 路径B（考研）：全力备考，冲刺研究生录取</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 完善个人作品集，整理四年C语言相关成果</li>
+                                <li><i class="fa fa-check-circle" aria-hidden="true"></i> 做好职业/学业过渡准备</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 我的技能（C语言70%，其他≤10%） -->
+    <section id="skills" class="skills-section">
+        <h2 class="section-title">我的技能</h2>
+        <div class="skills-container">
+            <!-- 编程语言（C语言70%，其他≤10%） -->
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i class="fa fa-code" aria-hidden="true"></i>
+                    编程语言
+                </h3>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">C语言</span>
+                        <span class="skill-level">70%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 70%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Python</span>
+                        <span class="skill-level">10%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 10%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Java</span>
+                        <span class="skill-level">8%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 8%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">HTML/CSS</span>
+                        <span class="skill-level">5%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 5%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 前端技术（全部≤10%） -->
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i class="fa fa-desktop" aria-hidden="true"></i>
+                    前端技术
+                </h3>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Vue.js</span>
+                        <span class="skill-level">10%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 10%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">React</span>
+                        <span class="skill-level">5%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 5%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">响应式设计</span>
+                        <span class="skill-level">8%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 8%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">CSS框架</span>
+                        <span class="skill-level">6%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 6%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 工具与其他（仅Git/VS Code较高，其他≤10%） -->
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i class="fa fa-wrench" aria-hidden="true"></i>
+                    工具与其他
+                </h3>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Git</span>
+                        <span class="skill-level">60%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 60%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">VS Code</span>
+                        <span class="skill-level">90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 90%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">MySQL</span>
+                        <span class="skill-level">10%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 10%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">组织活动</span>
+                        <span class="skill-level">80%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 80%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section id="contact" class="contact-section">
+        <h2 class="section-title">联系方式</h2>
+        <div class="contact-container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>与我取得联系</h3>
+                    <p class="contact-desc">
+                        如果你对我的C语言项目、技能或生涯规划感兴趣，或者有合作、交流的机会，欢迎通过以下方式联系我。
+                        我会尽快回复你的消息，期待与你共同成长、交流学习！
+                    </p>
+                    <div class="contact-links">
+                        <a href="mailto:your-email@example.com" class="contact-link">
+                            <div class="contact-icon">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                            </div>
+                            <span>your-email@example.com</span>
+                        </a>
+                        <a href="https://github.com/your-github" target="_blank" class="contact-link">
+                            <div class="contact-icon">
+                                <i class="fa fa-github" aria-hidden="true"></i>
+                            </div>
+                            <span>github.com/your-github</span>
+                        </a>
+                        <a href="https://linkedin.com/in/your-linkedin" target="_blank" class="contact-link">
+                            <div class="contact-icon">
+                                <i class="fa fa-linkedin" aria-hidden="true"></i>
+                            </div>
+                            <span>linkedin.com/in/your-linkedin</span>
+                        </a>
+                        <a href="#" class="contact-link">
+                            <div class="contact-icon">
+                                <i class="fa fa-weixin" aria-hidden="true"></i>
+                            </div>
+                            <span>微信：your-wechat-id</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">你的姓名</label>
+                            <input type="text" id="name" class="form-control" placeholder="请输入你的姓名">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">你的邮箱</label>
+                            <input type="email" id="email" class="form-control" placeholder="请输入你的邮箱">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">留言内容</label>
+                            <textarea id="message" class="form-control" placeholder="请输入你想对我说的话"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">发送留言</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="social-links">
+            <a href="https://github.com/your-github" target="_blank" class="social-link">
+                <i class="fa fa-github" aria-hidden="true"></i>
+            </a>
+            <a href="https://linkedin.com/in/your-linkedin" target="_blank" class="social-link">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+            </a>
+            <a href="#" class="social-link">
+                <i class="fa fa-weixin" aria-hidden="true"></i>
+            </a>
+            <a href="#" class="social-link">
+                <i class="fa fa-weibo" aria-hidden="true"></i>
+            </a>
+        </div>
+        <p>© 2024 鲍清衔. 持续更新中。</p>
+        <p>华中科技大学软件学院 | C语言开发方向 | 个人成长记录与数字家园</p>
+    </footer>
+
+    <!-- 原有SDK代码 -->
+    <script src="https://agi-dev-platform-web.cdn.bcebos.com/ai_apaas/embed/output/embedLiteSDK.js?responseExpires=0&t=1763776319977"></script>
+    <script>
+        new EmbedLiteSDK({appId: 'd5709b98-ba74-4f97-aadb-53911d56f57d', code: 'embedwSDpPRYK4aV8WTroTZpd'});
+    </script>
+
+    <!-- 增强版动态背景脚本（改为蓝色系粒子） -->
+    <script>
+        // 工具函数：随机数生成
+        function random(min, max) { return Math.random() * (max - min) + min; }
+
+        // 1. 星空背景
+        const starCanvas = document.getElementById('starField');
+        const starCtx = starCanvas.getContext('2d');
+        let stars = [];
+
+        class Star {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = random(0, starCanvas.width);
+                this.y = random(0, starCanvas.height);
+                this.size = random(0.1, 1.2);
+                this.alpha = random(0.3, 1);
+                this.twinkleSpeed = random(0.005, 0.02);
+                this.direction = random(0, 1) > 0.5 ? 1 : -1;
+            }
+            update() {
+                this.alpha += this.direction * this.twinkleSpeed;
+                if (this.alpha > 1 || this.alpha < 0.3) this.direction *= -1;
+            }
+            draw() {
+                starCtx.beginPath();
+                starCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                starCtx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                starCtx.fill();
+            }
+        }
+
+        // 2. 原粒子+网格背景优化（改为蓝色系）
+        const mainCanvas = document.getElementById('sciFiBg');
+        const mainCtx = mainCanvas.getContext('2d');
+        let gridLines = [];
+        let particles = [];
+
+        // 网格线增强（蓝色系）
+        class GridLine {
+            constructor(isHorizontal) {
+                this.isHorizontal = isHorizontal;
+                this.y = isHorizontal ? random(0, mainCanvas.height) : 0;
+                this.x = isHorizontal ? 0 : random(0, mainCanvas.width);
+                this.speed = random(0.5, 1.2);
+                this.alpha = random(0.1, 0.4);
+                this.pulseRate = random(0.002, 0.005);
+                this.color = random(0, 1) > 0.5 ? '#4299e1' : '#64b5f6';
+            }
+            update() {
+                this.isHorizontal ? (this.y += this.speed) : (this.x += this.speed);
+                this.alpha = Math.sin(Date.now() * this.pulseRate) * 0.2 + 0.3;
+                if (this.isHorizontal && this.y > mainCanvas.height) this.y = -20;
+                if (!this.isHorizontal && this.x > mainCanvas.width) this.x = -20;
+            }
+            draw() {
+                mainCtx.beginPath();
+                mainCtx.strokeStyle = `${this.color}${Math.floor(this.alpha * 100).toString(16).padStart(2, '0')}`;
+                mainCtx.lineWidth = random(0.5, 1.2);
+                this.isHorizontal 
+                    ? mainCtx.moveTo(0, this.y).lineTo(mainCanvas.width, this.y) 
+                    : mainCtx.moveTo(this.x, 0).lineTo(this.x, mainCanvas.height);
+                mainCtx.stroke();
+            }
+        }
+
+        // 粒子增强（蓝色系）
+        class Particle {
+            constructor() {
+                this.reset();
+                this.tail = [];
+                this.tailLength = random(3, 8);
+                this.color = random(0, 1) > 0.5 
+                    ? `rgba(66, 153, 225, ${random(0.3, 0.6)})` 
+                    : `rgba(100, 181, 246, ${random(0.3, 0.6)})`;
+            }
+            reset() {
+                this.x = random(0, mainCanvas.width);
+                this.y = random(0, mainCanvas.height);
+                this.size = random(0.8, 2);
+                this.speedX = (random(0, 1) - 0.5) * random(0.4, 0.8);
+                this.speedY = (random(0, 1) - 0.5) * random(0.4, 0.8);
+            }
+            update() {
+                this.tail.unshift({x: this.x, y: this.y});
+                if (this.tail.length > this.tailLength) this.tail.pop();
+
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > mainCanvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > mainCanvas.height) this.speedY *= -1;
+
+                // 粒子间引力/斥力
+                particles.forEach(p => {
+                    if (p !== this) {
+                        const dx = this.x - p.x;
+                        const dy = this.y - p.y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < 50) {
+                            this.x += dx * 0.005;
+                            this.y += dy * 0.005;
+                        } else if (dist < 200) {
+                            this.x -= dx * 0.001;
+                            this.y -= dy * 0.001;
+                        }
+                    }
+                });
+            }
+            draw() {
+                // 尾迹
+                this.tail.forEach((pos, i) => {
+                    const alpha = parseFloat(this.color.match(/\d+\.\d+/)[0]) * (1 - i/this.tailLength);
+                    const tailColor = this.color.replace(/\d+\.\d+(?=\))/, alpha.toFixed(2));
+                    mainCtx.beginPath();
+                    mainCtx.arc(pos.x, pos.y, this.size * (1 - i/this.tailLength), 0, Math.PI * 2);
+                    mainCtx.fillStyle = tailColor;
+                    mainCtx.fill();
+                });
+                // 本体
+                mainCtx.beginPath();
+                mainCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                mainCtx.fillStyle = this.color;
+                mainCtx.fill();
+            }
+        }
+
+        // 3. 能量网格（蓝色系）
+        const energyCanvas = document.getElementById('energyGrid');
+        const energyCtx = energyCanvas.getContext('2d');
+        let gridPoints = [];
+        const gridSize = 40;
+
+        class GridPoint {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.pulseRate = random(0.003, 0.008);
+                this.alpha = random(0.1, 0.3);
+            }
+            update() {
+                this.alpha = Math.sin(Date.now() * this.pulseRate) * 0.2 + 0.2;
+            }
+            draw() {
+                // 绘制点（蓝色系）
+                energyCtx.beginPath();
+                energyCtx.arc(this.x, this.y, 1, 0, Math.PI * 2);
+                energyCtx.fillStyle = `rgba(66, 153, 225, ${this.alpha})`;
+                energyCtx.fill();
+
+                // 绘制连接线（蓝色系）
+                if (this.x < energyCanvas.width - gridSize) {
+                    const rightPoint = gridPoints.find(p => p.x === this.x + gridSize && p.y === this.y);
+                    if (rightPoint) {
+                        energyCtx.beginPath();
+                        energyCtx.moveTo(this.x, this.y);
+                        energyCtx.lineTo(rightPoint.x, rightPoint.y);
+                        energyCtx.strokeStyle = `rgba(66, 153, 225, ${(this.alpha + rightPoint.alpha) / 4})`;
+                        energyCtx.lineWidth = 0.3;
+                        energyCtx.stroke();
+                    }
+                }
+                if (this.y < energyCanvas.height - gridSize) {
+                    const bottomPoint = gridPoints.find(p => p.x === this.x && p.y === this.y + gridSize);
+                    if (bottomPoint) {
+                        energyCtx.beginPath();
+                        energyCtx.moveTo(this.x, this.y);
+                        energyCtx.lineTo(bottomPoint.x, bottomPoint.y);
+                        energyCtx.strokeStyle = `rgba(66, 153, 225, ${(this.alpha + bottomPoint.alpha) / 4})`;
+                        energyCtx.lineWidth = 0.3;
+                        energyCtx.stroke();
+                    }
+                }
+            }
+        }
+
+        // 4. 粒子流（蓝色系）
+        const flowCanvas = document.getElementById('particleFlow');
+        const flowCtx = flowCanvas.getContext('2d');
+        let particleStreams = [];
+
+        class ParticleStream {
+            constructor() {
+                this.reset();
+                this.particles = [];
+                this.streamLength = random(10, 20);
+            }
+            reset() {
+                this.x = random(0, flowCanvas.width);
+                this.y = random(-100, -50);
+                this.directionX = random(-0.5, 0.5);
+                this.speedY = random(2, 4);
+                this.color = random(0, 1) > 0.5 ? '#4299e1' : '#64b5f6';
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.directionX;
+
+                // 添加新粒子
+                this.particles.unshift({x: this.x, y: this.y, alpha: 1});
+                if (this.particles.length > this.streamLength) this.particles.pop();
+
+                // 粒子淡出
+                this.particles.forEach((p, i) => {
+                    p.alpha = 1 - i/this.streamLength;
+                });
+
+                // 重置流
+                if (this.y > flowCanvas.height + 50) this.reset();
+            }
+            draw() {
+                // 绘制流线段（蓝色系）
+                for (let i = 0; i < this.particles.length - 1; i++) {
+                    const p1 = this.particles[i];
+                    const p2 = this.particles[i+1];
+                    flowCtx.beginPath();
+                    flowCtx.moveTo(p1.x, p1.y);
+                    flowCtx.lineTo(p2.x, p2.y);
+                    flowCtx.strokeStyle = `${this.color}${Math.floor(p1.alpha * 100).toString(16).padStart(2, '0')}`;
+                    flowCtx.lineWidth = random(1, 2);
+                    flowCtx.stroke();
+                }
+
+                // 绘制粒子节点（蓝色系）
+                this.particles.forEach(p => {
+                    flowCtx.beginPath();
+                    flowCtx.arc(p.x, p.y, random(1, 2), 0, Math.PI * 2);
+                    flowCtx.fillStyle = `${this.color}${Math.floor(p.alpha * 100).toString(16).padStart(2, '0')}`;
+                    flowCtx.fill();
+                });
+            }
+        }
+
+        // 初始化所有特效
+        function initAll() {
+            // 屏幕适配
+            function resize() {
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                
+                [starCanvas, mainCanvas, energyCanvas, flowCanvas].forEach(canvas => {
+                    canvas.width = width;
+                    canvas.height = height;
+                });
+
+                // 重新初始化星空
+                stars = Array.from({length: 500}, () => new Star());
+
+                // 重新初始化网格线
+                gridLines = Array.from({length: 80}, () => new GridLine(random(0, 1) > 0.5));
+
+                // 重新初始化粒子
+                particles = Array.from({length: 200}, () => new Particle());
+
+                // 重新初始化能量网格
+                gridPoints = [];
+                for (let x = 0; x < energyCanvas.width; x += gridSize) {
+                    for (let y = 0; y < energyCanvas.height; y += gridSize) {
+                        gridPoints.push(new GridPoint(x, y));
+                    }
+                }
+
+                // 重新初始化粒子流
+                particleStreams = Array.from({length: 15}, () => new ParticleStream());
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // 动画循环
+            function animateAll() {
+                // 星空背景
+                starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+                stars.forEach(star => { star.update(); star.draw(); });
+
+                // 原粒子+网格
+                mainCtx.fillStyle = 'rgba(0, 0, 16, 0.1)';
+                mainCtx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+                gridLines.forEach(line => { line.update(); line.draw(); });
+                particles.forEach(particle => { particle.update(); particle.draw(); });
+
+                // 能量网格
+                energyCtx.clearRect(0, 0, energyCanvas.width, energyCanvas.height);
+                gridPoints.forEach(point => { point.update(); point.draw(); });
+
+                // 粒子流
+                flowCtx.clearRect(0, 0, flowCanvas.width, flowCanvas.height);
+                particleStreams.forEach(stream => { stream.update(); stream.draw(); });
+
+                requestAnimationFrame(animateAll);
+            }
+
+            animateAll();
+        }
+
+        // 启动所有特效
+        window.addEventListener('load', initAll);
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 技能进度条动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const progressBars = entry.target.querySelectorAll('.skill-progress');
+                    progressBars.forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0';
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 300);
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.skill-category').forEach(category => {
+            observer.observe(category);
+        });
+    </script>
+</body>
+</html>
